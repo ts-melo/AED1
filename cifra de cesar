@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+  int n, c;
+  char cesar[500], decod[500];
+  scanf("%d", &n);
+  for(int i = 0; i<n; i++){
+    scanf("%s", cesar);
+    scanf("%d", &c);
+    for(int j = 0; j < strlen(cesar); j++){
+      decod[j] = cesar[j] - c;
+      if(decod[j] < 'A') {
+        decod[j] += 26;
+      }
+    }
+    decod[strlen(cesar)] = '\0';
+    printf("%s\n", decod);
+  }
+  return 0;
+}
