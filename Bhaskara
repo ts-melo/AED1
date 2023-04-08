@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <math.h>
+
+int main(){
+    double a,b,c,d,R1,R2;
+    scanf("%lf", &a);
+    scanf("%lf", &b);
+    scanf("%lf", &c);
+    d = pow(b, 2) - 4*a*c;
+    if(d>=0 && a!=0) {
+      R1=(b*(-1) + sqrt(d)) / (2*a);
+      R2=(b*(-1) - sqrt(d)) / (2*a);
+      printf("R1 = %.5lf", R1);
+      printf("R2 = %.5lf", R2);
+    } else {
+        printf("Impossivel calcular");
+    }
+  return 0;
+}
