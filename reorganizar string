@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+  char vitor[50], carlos[50], ana[100], *menor, *maior;
+  int n, tc, tv, ttotal;
+  scanf("%d", &n);
+  for (int i = 0; i < n; i++) {
+    scanf("%s %s", vitor, carlos);
+    tv = strlen(vitor);
+    tc = strlen(carlos);
+    menor = tv > tc ? carlos : vitor;
+    maior = tv > tc ? vitor : carlos;
+    for (int i = 0; i < strlen(menor); i++) {
+      ana[i * 2] = vitor[i];
+      ana[i * 2 + 1] = carlos[i];
+    }
+    for (int i = strlen(menor); i < strlen(maior); i++) {
+      ana[strlen(menor) + i] = maior[i];
+    }
+    ana[tv + tc] = '\0';
+    printf("%s\n", ana);
+  }
+
+  return 0;
+}
