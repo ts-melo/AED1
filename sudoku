@@ -1,0 +1,88 @@
+#include <stdio.h>
+#define MAX 9
+
+
+int main(void) {
+  int sudoku[MAX][MAX], i, j, k, l, n, a, b, v = 0;
+  
+  scanf("%d", &n);
+  int result[n];
+  
+  for (k = 0; k < n; k++) {
+    // ler a matriz
+    for (i = 0; i < MAX; i++) {
+      for (j = 0; j < MAX; j++) {
+        scanf("%d", &sudoku[i][j]);
+      }
+    }
+
+    // checando se as linhas tem numeros iguais
+    for (i = 0; i < MAX; i++) {
+      for (j = 0; j < MAX; j++) {
+        for (l = 0; l < MAX; l++) {
+          if ((j != l) && (sudoku[i][j] == sudoku[i][l])) {
+            v = 1;
+          }
+        }
+      }
+    }
+    if(v == 1) {
+      result[k] = 1;
+      continue;
+    }
+
+    // checando se as colunas tem numeros iguais
+    for (j = 0; j < MAX; j++) {
+      for (i = 0; i < MAX; i++) {
+        for (l = 0; l < MAX; l++) {
+          if ((i != l) && (sudoku[i][j] == sudoku[l][j])) {
+            v = 1;
+          }
+        }
+      }
+    }
+    if(v == 1) {
+      result[k] = 1;
+      continue;
+    }
+
+    // checa submatrizes 3x3
+    for (i = 0; i < MAX; i += 3) {
+      for(j = 0; j < MAX; j += 3) {
+        for(int f = i; f < 3 + i; f++) {
+          for(int g = j; g < 3 + j ; g++){
+            // printf("%d ", sudoku[f][g]);
+            for(int x = i; x < 3 + i; x++){
+              for(int y = j; y < 3 + j; y++){
+                if(x == f && y == g) 
+                  continue;
+                if(sudoku[f][g] == sudoku[x][y])
+                  v = 1;
+              }
+            }
+          }
+          // printf("\n");
+        }
+        // printf("\n");
+      }
+    }
+    if(v == 1) {
+      result[k] = 1;
+      continue;
+    }
+    result[k] = 0;
+  }
+  
+  for(k = 0; k < n; k++) {
+    printf("Instancia %d\n", k+1);
+    if(result[k] == 1){
+      printf("NAO\n");
+      printf("\n");
+    } else {
+      printf("SIM\n");
+      printf("\n");
+    }
+    
+  }
+  return 0;
+}
