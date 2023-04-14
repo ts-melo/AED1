@@ -1,0 +1,159 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct s_node {
+  char name[21];
+  struct s_node *previous, *next;
+} t_node;
+
+typedef struct s_list {
+  t_node *first, *last;
+  t_node *cursor;
+  int n;
+} t_list;
+
+t_list create_list() {
+  t_list *list = malloc(sizeof(t_list));
+  list->n = 0;
+  list->first = NULL;
+  list->last = NULL;
+  list->cursor = NULL;
+  return *list;
+}
+
+t_node *create_node(char *name) {
+  t_node *node = malloc(sizeof(t_node));
+  node->previous = NULL;
+  node->next = NULL;
+  strncpy(node->name, name, 20);
+  return node;
+}
+
+void set_cursor_to_name(char *name, t_list *list) {
+  if (list->n == 0) {
+    list->cursor = NULL;
+    return;
+  }
+  list->cursor = list->first;
+  for (int i = 0; i < list->n; i++) {
+    if (strcmp(name, list->cursor->name) == 0)
+      break;
+    list->cursor = list->cursor->next;
+  }
+}
+
+void set_cursor_to_pos(int pos, t_list *list) {
+  if (list->n == 0) {
+    list->cursor = NULL;
+    return;
+  }
+  list->cursor = list->first;
+  for(int i = 0; i < pos; i++) {
+    list->cursor = list->cursor->next;
+  }
+}
+
+void insert_to_cursor(char *name, t_list *list) {
+  t_node *node = create_node(name);
+  if (list->cursor == NULL) {
+    if(list->first == NULL) {
+      list->first = node;
+    } else {
+      node->previous = list->last;
+      list->last->next = node;
+    }
+    list->last = node;
+    list->last->next = NULL;
+    list->n++;
+    return;
+  }
+    
+  // queremos inserir o item node no lugar de list->cursor
+  node->previous = list->cursor->previous;
+  node->next = list->cursor;
+  if (list->cursor != list->first)
+    list->cursor->previous->next = node;
+  list->cursor->previous = node;
+  list->n++;
+
+  // se necessário, atualizar list->first
+  if (list->cursor == list->first)
+    list->first = node;
+    
+}
+
+//target= nome qual a outra lista vai ser colocada antes
+void insert_by_name(char *name, t_list *list, char *target) {
+  set_cursor_to_name(target, list);
+  insert_to_cursor(name, list);
+}
+
+void insert_by_pos(char *name, t_list *list, int pos) {
+  set_cursor_to_pos(pos, list);
+  insert_to_cursor(name, list);
+}
+
+// imprime a lista
+void print_list(t_list *list) {
+  t_node *target = list->first;
+  while (target != NULL) {
+    printf("%s", target->name);
+    if(target->next != NULL)
+      printf(" ");
+    target = target->next;
+  }
+  printf("\n");
+}
+
+// lendo os nomes char por char e separando quando achar um espaço
+void read_names(t_list *list) {
+  char name[20], ch = '0';
+  int i = 0;
+  while(ch != '\n') {
+    scanf("%c", &ch);
+    if(ch == ' ' || ch == '\n') {
+      name[i] = '\0';
+      i = 0;
+      list->cursor = NULL;
+      insert_to_cursor(name, list);
+    } else {
+      name[i++] = ch;
+    }
+  }
+}
+
+// colocar uma lista em um lugar especifico
+void merge_list(t_list *l1, t_list *l2, char *target) {
+  t_node *aux = l2->first;
+  while(aux != NULL) {
+    insert_by_name(aux->name, l1, target);
+    aux = aux->next;
+  }
+}
+
+// colocar uma no fim da outra outra
+void append_list(t_list *l1, t_list *l2) {
+  t_node *aux = l2->first;
+  while(aux != NULL) {
+    insert_by_pos(aux->name, l1, l1->n);
+    aux = aux->next;
+  }
+}
+
+int main(void) {
+    t_list list = create_list(), aux = create_list();
+    char name[30];
+    
+    read_names(&list);
+    read_names(&aux);
+
+    scanf("%s", name);
+    if(strcmp(name, "nao") != 0)
+      merge_list(&list, &aux, name);
+    else
+      append_list(&list, &aux);
+      
+    print_list(&list);
+    return 0;
+}
