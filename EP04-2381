@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct{
+    char name[21];
+} str;
+
+void sorting( str *aluno, int n ){
+    str aux;
+    int j, k;
+    for( int i = 1; i < n; i++) {
+        j = i - 1;
+        k = i;
+        aux = aluno[k];
+        while(strcmp(aux.name, aluno[j].name) < 0 && j >= 0) {
+            aluno[k] = aluno[j];
+            aluno[j] = aux;
+            j--;
+            k--;
+            aux = aluno[k];
+        }
+    }   
+}
+
+// void print_list(str *list, int n) {
+//     for(int i = 0; i < n; i++) {
+//         printf("%s ", list[i].name);
+//     }
+//     printf("\n");
+// }
+
+int main() {
+    int n, k, i;
+    scanf("%d", &n);
+    scanf("%d", &k);
+    str names[n];
+    
+    for ( i = 0 ; i < n ; i++){
+        scanf("%s", names[i].name);
+    }
+    
+    sorting(names, n);
+    // print_list(names, n);
+    printf("%s\n", names[k-1].name);
+    
+    return 0;
+}
