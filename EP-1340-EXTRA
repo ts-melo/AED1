@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int isQueue(int *list, int x, int tam) {
+    if(list[0] != x)
+        return 0;
+    for(int i = 0; i < tam; i++){
+        list[i] = list[i+1];
+    }
+    return 1;
+}
+
+int isStack(int *list, int x, int tam) {
+    if(list[tam-1] != x)
+        return 0;
+    return 1;
+}
+
+int isPriority(int *list, int x, int tam) {
+    int i_maior = 0;
+    for(int i = 1; i < tam; i++) {
+        if(list[i] > list[i_maior])
+            i_maior = i;
+    }
+    if(x != list[i_maior])
+        return 0;
+    
+    for(int i = i_maior; i < tam; i++) {
+        list[i] = list[i+1];
+    }
+    return 1;
+}
+
+int main() {
+    while(1) {
+        char buffer[1000];
+        if(fgets(buffer, 1000, stdin) == NULL)
+            return 0;
+        int tam = 0, n = 0, op = -1, x;
+        sscanf(buffer, "%d", &n);
+        
+        if(n == EOF)
+            return 0;
+        int *list1 = malloc(sizeof(int)*n);
+        int *list2 = malloc(sizeof(int)*n);
+        int *list3 = malloc(sizeof(int)*n);
+        
+        // 0 - fila, 1 - pilha, 2 - prioridade
+        int bools[3];
+        for(int i = 0; i < 3; i++) {
+            bools[i] = 1;
+        }
+    
+    
+        for(int i = 0; i < n; i++) {
+            if(fgets(buffer, 1000, stdin) == NULL)
+                return 0;
+            sscanf(buffer, "%d %d", &op, &x);
+            if(op == 1) {
+                list1[tam] = x;
+                list2[tam] = x;
+                list3[tam++] = x;
+            }
+            else if(op == 2) {
+                if(bools[0] && !isQueue(list1, x, tam))
+                    bools[0] = 0;
+                if(bools[1] && !isStack(list2, x, tam))
+                    bools[1] = 0;
+                if(bools[2] && !isPriority(list3, x, tam))
+                    bools[2] = 0;
+                tam--;
+            }
+        }
+    
+    
+        if(!bools[0] && !bools[1] && !bools[2])
+            printf("impossible\n");
+        else if(bools[0] + bools[1] + bools[2] > 1)
+            printf("not sure\n");
+        else if(bools[0])
+            printf("queue\n");
+        else if(bools[1])
+            printf("stack\n");
+        else if(bools[2])
+            printf("priority queue\n");
+        
+        free(list1);
+        free(list2);
+        free(list3);
+    }
+    return 0;
+}
