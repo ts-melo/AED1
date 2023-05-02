@@ -10,7 +10,7 @@ void generate(int v[], int n){
 int insertsort(int v[], int n){
     int aux, i, j;
     for(i = 1; i < n; i++){
-        aux = v[i-1]; //valor anterior ao q to pegando pra comparar;
+        aux = v[i]; //valor anterior ao q to pegando pra comparar;
         for(j = i-1; j >= 0 && v[j] > aux; j--){ // caso seja maior, será movido para a direita
             v[j+1] = v[j];
         }
